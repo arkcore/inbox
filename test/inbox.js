@@ -45,7 +45,8 @@ module.exports["Inbox tests"] = {
                         }
                     }
                 }
-            }
+            },
+            debug: false
         });
 
         this.server.listen(IMAP_PORT, (function(){
@@ -71,12 +72,14 @@ module.exports["Inbox tests"] = {
     "List mailboxes": function(test){
         this.client.listMailboxes(function(err, mailboxes){
             test.ifError(err);
+            // TODO: this method returns ALL existing mailboxes, even unsubscribed ones
+            // this.client.getCurrentMailbox().listChildren will return _only_ subscribed ones
             test.equal(mailboxes.length, 3);
             test.equal(mailboxes[0].path, "INBOX");
             test.equal(mailboxes[1].path, "TRASH");
             test.equal(mailboxes[2].name, "SENT");
             test.done();
-        });
+        }.bind(this));
     },
 
     "Fetch mailbox": function(test){
@@ -205,6 +208,7 @@ module.exports["Inbox tests"] = {
 
     "Fetch message contents": function(test){
         this.client.openMailbox("INBOX", (function(err){
+
             test.ifError(err);
             var chunks = [],
                 chunklength = 0,
@@ -294,7 +298,7 @@ module.exports["Inbox tests"] = {
             this.client.storeMessage("Subject: hello 7\r\n\r\nWorld 7!", ["\\Seen"], (function(err, params){
                 test.ifError(err);
                 test.equal(params.UID, mailbox.UIDNext);
-                this.client.openMailbox("INBOX", function(err, mailbox){
+                this.client.openMailbox("INBOX", { force: true }, function(err, mailbox){
                     test.equal(mailbox.count, 10);
                     test.done();
                 });

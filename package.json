@@ -10,6 +10,7 @@
   ],
   "main": "lib/client.js",
   "dependencies": {
+    "lodash": "^3.10.0",
     "mimelib": "^0.2.19",
     "utf7": "~1.0.0",
     "xoauth2": "*"

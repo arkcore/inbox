@@ -16,8 +16,8 @@
     "xoauth2": "^1.1.0"
   },
   "devDependencies": {
-    "nodeunit": "*",
-    "hoodiecrow": "~1.1.19"
+    "hoodiecrow": "^1.2.0",
+    "nodeunit": "*"
   },
   "scripts": {
     "test": "nodeunit test"
